@@ -6,7 +6,7 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "snazzy-froyo-bb2151.netlify.app" }));
 
 app.use(logger("dev"));
 app.use(express.json());
