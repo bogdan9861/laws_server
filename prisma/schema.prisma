@@ -22,15 +22,23 @@ model User {
 
 enum Role {
   ADMIN
-  MANAGER
+  USER
 }
 
-model Item {
-  id                   String   @id @default(uuid())
-  name                 String
-  inventarization_code String   @unique
-  photo_url            String?
-  upload_date          DateTime @default(now())
+model Question {
+  id              Int      @id @default(autoincrement())
+  title           String
+  text            String
+  description     String?
+  document_number String?
+  date            DateTime @default(now())
+  answers         Answer[]
+}
 
-  @@map("items")
+model Answer {
+  id         Int       @id @default(autoincrement())
+  text       String
+  isValid    Boolean   @default(false)
+  Question   Question? @relation(fields: [questionId], references: [id])
+  questionId Int?
 }
