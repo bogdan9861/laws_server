@@ -116,7 +116,18 @@ const remove = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
+    const number = req.query.number;
+
+    const where = {};
+
+    if (number) {
+      where.document_number = {
+        contains: number,
+      };
+    }
+
     const questions = await prisma.question.findMany({
+      where,
       include: {
         answers: {
           include: {
