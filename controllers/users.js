@@ -100,8 +100,19 @@ const current = async (req, res) => {
   }
 };
 
+const getAll = async (req, res) => {
+  try {
+    const users = await prisma.user.findMany();
+
+    res.status(200).json([...users, { count: users.length }]);
+  } catch (error) {
+    res.status(500).json({ message: "Unknown server error" });
+  }
+};
+
 module.exports = {
   register,
   login,
   current,
+  getAll,
 };

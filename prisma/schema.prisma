@@ -11,11 +11,13 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  phone    String @unique
-  password String
-  role     Role
+  id             Int              @id @default(autoincrement())
+  name           String
+  phone          String           @unique
+  password       String
+  role           Role
+  questionId     Int?
+  QuestionToUser QuestionToUser[]
 
   @@map("users")
 }
@@ -26,13 +28,17 @@ enum Role {
 }
 
 model Question {
-  id              Int      @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   title           String
   text            String
   description     String?
   document_number String?
-  date            DateTime @default(now())
+  date            DateTime         @default(now())
   answers         Answer[]
+  QuestionToUser  QuestionToUser[]
+
+  passedPercent Int @default(0)
+  failedPercent Int @default(0)
 }
 
 model Answer {
@@ -41,4 +47,19 @@ model Answer {
   isValid    Boolean   @default(false)
   Question   Question? @relation(fields: [questionId], references: [id])
   questionId Int?
+}
+
+model QuestionToUser {
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  validAnswer Boolean?
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  assignedAt DateTime @default(now())
+
+  @@id([questionId, userId])
+  @@map("chats_to_users")
 }

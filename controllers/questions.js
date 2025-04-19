@@ -134,6 +134,12 @@ const getAll = async (req, res) => {
             Question: true,
           },
         },
+        QuestionToUser: {
+          include: {
+            user: true,
+            question: false,
+          },
+        },
       },
     });
 
